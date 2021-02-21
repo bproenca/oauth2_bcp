@@ -25,6 +25,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         .hasRole("developer") // user role mappings
                         // .hasAnyAuthority("ROLE_developer") // same as line above
                         // .hasAnyRole("devleoper","user")
+                        .antMatchers(HttpMethod.GET, "/actuator/info")
+                        .permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .oauth2ResourceServer()
