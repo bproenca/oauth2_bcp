@@ -11,3 +11,8 @@ mvn spring-boot:run
 * demo_resource_server
     * You can start multiple instances
     * API Gateway knows all instances (discover service) and will load balance the traffic
+
+
+## CORS
+
+You can not have CORS configuration on both: ApiGateway and ResourceServer
