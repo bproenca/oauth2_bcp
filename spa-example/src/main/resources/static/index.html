@@ -55,10 +55,10 @@ function getAuthCode() {
     var state = document.getElementById("stateValue").innerHTML;
     var codeChallenge = document.getElementById("codeChallengeValue").innerHTML;
 
-    var authorizationURL = "http://localhost:8080/auth/realms/appsdeveloper/protocol/openid-connect/auth";
-    authorizationURL += "?client_id=photo-app-PKCE-client";
+    var authorizationURL = "http://localhost:8080/auth/realms/realm-google/protocol/openid-connect/auth";
+    authorizationURL += "?client_id=pkce-google-client";
     authorizationURL += "&response_type=code";
-    authorizationURL += "&scope=openid";
+    authorizationURL += "&scope=openid profile";
     authorizationURL += "&redirect_uri=http://localhost:8181/authcodeReader.html"; 
     authorizationURL += "&state=" + state;
     authorizationURL += "&code_challenge=" + codeChallenge;
@@ -81,7 +81,7 @@ function requestTokens(authCode) {
     var codeVerifier = document.getElementById("codeVerifierValue").innerHTML;
     var data = {
         "grant_type": "authorization_code",
-        "client_id": "photo-app-PKCE-client",
+        "client_id": "pkce-google-client",
         "code": authCode,
         "code_verifier": codeVerifier,
         "redirect_uri":"http://localhost:8181/authcodeReader.html"
@@ -92,7 +92,7 @@ function requestTokens(authCode) {
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
         },
         type: "POST",
-        url: "http://localhost:8080/auth/realms/appsdeveloper/protocol/openid-connect/token",
+        url: "http://localhost:8080/auth/realms/realm-google/protocol/openid-connect/token",
         data: data,
         success: postRequestAccessToken,
         dataType: "json"
@@ -101,6 +101,7 @@ function requestTokens(authCode) {
 
 function postRequestAccessToken(data, status, jqXHR) {
     document.getElementById("accessToken").innerHTML = data["access_token"];
+    document.getElementById("idToken").innerHTML = data["id_token"];
 }
 
 function getInfoFromResourceServer(){
@@ -141,6 +142,8 @@ function postInfoFromAccessToken(data, status, jqXHR) {
 <div><input type="button" value="Get Auth Code" onclick="getAuthCode()"/></div>
 
  <p>Access token: <span id="accessToken"></span></p>
+
+ <p>ID token: <span id="idToken"></span></p>
 
   <br/>
   <div><input type="button" value="Load" onclick="getInfoFromResourceServer()"/></div>
